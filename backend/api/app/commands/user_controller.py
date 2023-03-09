@@ -1,9 +1,9 @@
 from fastapi import APIRouter
 from http import HTTPStatus
 from fastapi import Response
-from core.models.user import UserDO, UserDTO
-from core.models.responses import BasicResponse, CreateResponse
-import core.services.user_service as user_service
+from api.core.models.user import UserDO, UserDTO
+from api.core.models.responses import BasicResponse, CreateResponse
+import api.core.services.user_service as user_service
 
 
 router = APIRouter(tags=['users'])
@@ -38,7 +38,7 @@ async def create_user(user: UserDO, response: Response):
 @router.put('/users')
 async def edit_user(user: UserDO, response: Response):
     ''' Endpoint para alterar um usuario existente '''
-    if user.validate_edit():
+    if not user.validate_edit():
         response.status_code = HTTPStatus.BAD_REQUEST
         return BasicResponse(message = 'O Id é obrigatorio para editar um usuario')
 
@@ -54,7 +54,7 @@ async def delete_by_id(id: int, response: Response):
     ''' Endpoint para deletar um usuario '''
     if user_service.delete_user(id):
         response.status_code = HTTPStatus.ACCEPTED
-        return BasicResponse(message = 'Usuario deletado com sucesso!')
+        return BasicResponse(message = 'Usuario deletado com sucesso.')
     
     response.status_code = HTTPStatus.BAD_REQUEST
     return BasicResponse(message = 'Não foi possivel deletar o usuario')

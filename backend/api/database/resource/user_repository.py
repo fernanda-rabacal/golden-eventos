@@ -1,6 +1,6 @@
-from core.models.user import UserDO 
-from database.schemas.user_entity import UserEntity
-from database import session_factory
+from api.core.models.user import UserDO 
+from api.database.schemas.user_entity import UserEntity
+from api.database import session_factory
 
 
 class UserConverter:
@@ -30,15 +30,17 @@ class UserConverter:
 def save_and_flush(user: UserDO) -> UserDO:
     with session_factory() as session:
         try:
-            user_entity = session.get(UserEntity, user.id)
+            if user.id is not None:
+                user_entity = session.get(UserEntity, user.id)
 
-            # Novas Infos
-            user_entity.email = user.email
-            user_entity.nome = user.nome
-            user_entity.senha = user.senha
-            user_entity.cpf = user.cpf
-            user_entity.promotor = user.promotor
-            
+                # Novas Infos
+                user_entity.email = user.email
+                user_entity.nome = user.nome
+                user_entity.senha = user.senha
+                user_entity.cpf = user.cpf
+                user_entity.promotor = user.promotor
+            else:
+                session.add(UserConverter.toEntity(user))
             session.commit()
             return True
         except Exception as err:

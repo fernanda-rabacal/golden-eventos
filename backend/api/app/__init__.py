@@ -10,7 +10,7 @@ def create_app(title: str, description: str) -> FastAPI:
     '''
     função para criar a aplicação principal
     '''
-    import app.commands.user_controller as users
+    import api.app.commands.user_controller as users
 
 
     app = FastAPI (

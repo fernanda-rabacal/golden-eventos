@@ -1,5 +1,5 @@
-from core.models.user import UserDTO, UserDO
-import database.resource.user_repository as user_repository
+from api.core.models.user import UserDTO, UserDO
+import api.database.resource.user_repository as user_repository
 
 
 def find_all() -> list[UserDTO] | None:
@@ -14,10 +14,10 @@ def user_exist(id: int) -> bool:
     return (True if find_by_id(id) is not None else False)
 
 def create_user(user: UserDO) -> bool:
-    if user.validate_create():
-        return user_repository.save_and_flush(user)
-    
-    return False
+    if not user.validate_create():
+        user.generate_password(8)
+
+    return user_repository.save_and_flush(user)
 
 def edit_user(user: UserDO) -> bool:
     if user_exist(user.id):

@@ -33,7 +33,9 @@ class UserDO(UserDTO):
     def validate_edit(self) -> bool:
         if self.id is None:
             return False
+        return True
     
     def validate_create(self) -> bool:
         if self.senha is None:
             return False
+        return True

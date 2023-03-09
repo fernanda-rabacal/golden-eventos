@@ -1,7 +1,7 @@
-from database import engine
+from api.database import engine
 from sqlalchemy.orm import relationship, declarative_base, DeclarativeBase
 from sqlalchemy import Column, Integer, Boolean, String, DateTime
-from core.models.user import UserDO
+from api.core.models.user import UserDO
 
 
 Model: DeclarativeBase = declarative_base()

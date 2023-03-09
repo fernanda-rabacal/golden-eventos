@@ -1,4 +1,4 @@
-from database.schemas import *
+from api.database.schemas import *
 
 
 class UserEntity(Model):
