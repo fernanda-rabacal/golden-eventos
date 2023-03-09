@@ -1,17 +1,39 @@
 from pydantic import BaseModel
+import random
+from string import ascii_lowercase, ascii_uppercase, punctuation, digits
+        
+
+all_characters = ascii_lowercase + ascii_uppercase + punctuation + digits
 
 
 class UserDTO(BaseModel):
     id: int | None = None
-    username: str
+    email: str
+    nome: str
+    cpf: str
+    promotor: bool = False
+
 
 class UserDO(UserDTO):
-    password: str
-    admin: bool = False
+    senha: str | None = None
 
     def to_dto(self) -> UserDTO:
-        return UserDTO(id = self.id, username = self.username)
+        return UserDTO (
+            id = self.id, 
+            email = self.email,
+            nome = self.nome,
+            cpf = self.cpf,
+            promotor = self.promotor 
+        )
+    
+    def generate_password(self, lenght: int) -> None:
+        if self.senha is None:
+            self.senha = ''.join(random.sample(all_characters, lenght))
     
     def validate_edit(self) -> bool:
         if self.id is None:
+            return False
+    
+    def validate_create(self) -> bool:
+        if self.senha is None:
             return False

@@ -1,4 +1,4 @@
-from database.connection import engine
+from database import engine
 from sqlalchemy.orm import relationship, declarative_base, DeclarativeBase
 from sqlalchemy import Column, Integer, Boolean, String, DateTime
 from core.models.user import UserDO
@@ -7,5 +7,6 @@ from core.models.user import UserDO
 Model: DeclarativeBase = declarative_base()
 
 
-if __name__ != '__main__':
+def create_tables() -> None:
+    ''' Criar as tabelas no banco de acordo com os modelos do sqlalchemy '''
     Model.metadata.create_all(bind=engine)

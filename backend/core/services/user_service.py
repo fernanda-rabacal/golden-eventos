@@ -1,5 +1,5 @@
-from core.schemas.user import UserDTO, UserDO
-import database.command.user_repository as user_repository
+from core.models.user import UserDTO, UserDO
+import database.resource.user_repository as user_repository
 
 
 def find_all() -> list[UserDTO] | None:
@@ -11,13 +11,18 @@ def find_by_id(id: int):
     return user if user is not None else None
 
 def user_exist(id: int) -> bool:
-    return (True if user_repository.find_by_id(id) is not None else False)
+    return (True if find_by_id(id) is not None else False)
 
 def create_user(user: UserDO) -> bool:
-    return user_repository.save_and_flush(user)
+    if user.validate_create():
+        return user_repository.save_and_flush(user)
+    
+    return False
 
 def edit_user(user: UserDO) -> bool:
     if user_exist(user.id):
+        if user.senha is None:
+            user.senha = user_repository.find_by_id(user.id).senha
         return user_repository.save_and_flush(user)
     return False
 

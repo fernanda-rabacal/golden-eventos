@@ -1,3 +1,7 @@
+from database.schemas import *
+from datetime import datetime as dt
+
+
 class Evento(Model):
     __tablename__ = 'eventos'
 
