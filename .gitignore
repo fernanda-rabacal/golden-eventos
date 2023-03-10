@@ -1,12 +1,11 @@
-# Backend (Python)
+# Backend (Python - FastApi)
 
 .venv
 __pycache__
 .pytest_cache
 
-# Frontend (React - Typescript)
-
-# Logs
+# Frontend (TypeScript - React)
+## Logs
 logs
 *.log
 npm-debug.log*
@@ -20,7 +19,7 @@ dist
 dist-ssr
 *.local
 
-# Editor directories and files
+## Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
