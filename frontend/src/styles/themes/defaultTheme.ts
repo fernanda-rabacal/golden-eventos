@@ -1,0 +1,33 @@
+export const defaultTheme = {
+  colors: {
+    'white': '#fff',
+    'black': '#000',
+    'headline': '#22262a', 
+    'paragraph': '#484f56', 
+    "base-yellow": "#E6CD00",
+    "base-gray": "#EBEDF2",
+    "brand-yellow-dark": "#D9981E",
+    "brand-red-dark": "#591902",
+    "brand-pink": "#BF7960",
+    'brand-beige': '#fffaf0',
+    "base-button": "#D1D1D1",
+    "base-background": "#FAFAFA",
+    "base-card": "#E9E9E9",
+    "base-input": "#E1E1E1",
+    "base-hover": "#D7D5D5",
+    "base-label": "#8D8686",
+    "base-text": "#574F4D",
+    "base-subtitle": "#403937",
+    "base-title": "#272221",
+    "base-error": "#f84747",
+  },
+  textSizes: {
+    "title-s": "2.4rem",
+    "title-m": "2.8rem",
+    "title-l": "3.6rem",
+    "text-regular-m": "1.4rem",
+    "text-regular-l": "1.6rem",
+    "text-regular-xl": "2rem",
+    "components-button-g": "1.8rem",
+  }
+} as const;
