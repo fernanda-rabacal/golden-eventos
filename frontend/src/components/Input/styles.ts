@@ -19,7 +19,6 @@ interface InputProps {
 export const InputContainer = styled.div<InputProps>`
   outline: none;
   height: 4.5rem;
-  border-bottom: 1px solid ${({ theme }) => theme.colors["base-button"]};
   transition: 0.4s;
   display: flex;
   align-items: center;

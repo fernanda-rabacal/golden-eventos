@@ -11,7 +11,7 @@ interface ILogin {
   password: string;
 }
 
-export function Login() {
+export function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const { register, handleSubmit } = useForm<ILogin>()
   
@@ -25,17 +25,19 @@ export function Login() {
 		setShowPassword((prevValue) => !prevValue);
 	};
 
+  document.title = "Login - Golden Eventos"
+
   return(
     <LoginContainer className="container">
       <h1>Acesse sua conta</h1>
       <FormContainer onSubmit={handleSubmit(login)}>
         <div>
           <label htmlFor="email">Email</label>
-          <Input type="email" id="email" {...register('email')}/>
+          <Input type="email" id="email" required {...register('email')}/>
         </div>
         <div>
           <label htmlFor="password">Senha</label>
-          <Input type={showPassword ? "text" : "password"}  id="password" {...register('password')}/>
+          <Input type={showPassword ? "text" : "password"}  id="password" required {...register('password')}/>
           {
             showPassword ? 
             <EyeSlash size={22} onClick={handleClickShowPassword} color={colors["base-yellow"]}/> :

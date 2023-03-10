@@ -31,6 +31,14 @@ export const FormContainer = styled.form`
   border: 1px solid  ${({ theme }) => theme.colors["base-hover"]};
   padding: 2rem 3rem 0;
   margin-top: 1.5rem;
+
+  input {
+    border-bottom: 1px solid ${({ theme }) => theme.colors["base-button"]};
+
+    &:focus {
+      border-color: ${({ theme }) => theme.colors["base-yellow"]};
+    }
+  }
   
   a {
     color: ${({theme}) => theme.colors["base-yellow"]};
