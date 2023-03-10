@@ -4,7 +4,7 @@ from api.database.schemas import create_tables
 
 
 golden_app: FastAPI = create_app(
-    title='api-gondel-eventos', 
+    title='api-golden-eventos', 
     description='Uma api de um site de gerenciamento de eventos'
 )
 

@@ -20,4 +20,16 @@ class UserEntity(Model):
         self.promotor = promotor
     
     def __str__(self) -> str:
-        return f'<{self.username}>'
+        return f'<{self.id} - {self.username}>'
+    
+    def fill_fields_to_edit(self, user) -> None:
+        if user.email is not None:
+            self.email = user.email
+        if user.senha is not None:
+            self.senha = user.senha
+        if user.nome is not None:
+            self.nome = user.nome
+        if user.cpf is not None:
+            self.cpf = user.cpf
+        if user.promotor is not None:
+            self.promotor = user.promotor

@@ -18,3 +18,4 @@ engine: Engine = create_engine(conx_str)
 def session_factory() -> Session:
     session: Session = sessionmaker(bind=engine)
     return session()
+    

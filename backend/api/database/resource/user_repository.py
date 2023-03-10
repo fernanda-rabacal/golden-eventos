@@ -1,4 +1,5 @@
-from api.core.models.user import UserDO 
+from api.core.models.user import UserDO
+from api.core.models.exceptions import DatabaseException
 from api.database.schemas.user_entity import UserEntity
 from api.database import session_factory
 
@@ -23,39 +24,42 @@ class UserConverter:
             nome = user_do.nome,
             senha = user_do.senha,
             cpf = user_do.cpf,
-            promotor = user_do.promotor 
+            promotor = user_do.promotor if user_do.promotor is not None else False
         )
     
 
-def save_and_flush(user: UserDO) -> UserDO:
+def save_and_flush(userDO: UserDO) -> int:
     with session_factory() as session:
         try:
-            if user.id is not None:
-                user_entity = session.get(UserEntity, user.id)
-
-                # Novas Infos
-                user_entity.email = user.email
-                user_entity.nome = user.nome
-                user_entity.senha = user.senha
-                user_entity.cpf = user.cpf
-                user_entity.promotor = user.promotor
+            if userDO.id is not None:
+                user = session.get(UserEntity, userDO.id)
+                user.fill_fields_to_edit(userDO)
             else:
-                session.add(UserConverter.toEntity(user))
+                user = UserConverter.toEntity(userDO)
+                session.add(user)
             session.commit()
-            return True
+            return user.id
         except Exception as err:
             session.rollback()
-            raise err
+            raise DatabaseException (
+                status = 'INTERNAL_SERVER_ERROR',
+                message = 'Não foi possivel realizar processar sua requisição no banco',
+                error = str(err)
+            )
 
-def delete_by_id(id: int) -> bool:
+def delete_by_id(id: int) -> None:
     with session_factory() as session:
         try:
             user: UserEntity = session.get(UserEntity, id)
             session.delete(user)
             session.commit()
-            return True
         except Exception as err:
-            raise err('Não foi possivel deletar o usuario')
+            session.rollback()
+            raise DatabaseException (
+                status = 'INTERNAL_SERVER_ERROR',
+                message = 'Não foi possivel realizar processar sua requisição no banco',
+                error = str(err)
+            )
 
 def find_all() -> list[UserDO] | None:
     all_users = [UserConverter.toDO(user) for user in session_factory().query(UserEntity).all()]
