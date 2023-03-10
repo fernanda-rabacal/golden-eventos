@@ -1,6 +1,11 @@
 from pydantic import BaseModel
-from api.core.models.exceptions import UsuarioException
+from app.errors.exceptions import UsuarioException
+from app.security.auth import AuthHandler
 
+
+class UserLogin(BaseModel):
+    email: str
+    senha: str
 
 class UserDTO(BaseModel):
     id: int | None = None
@@ -63,3 +68,6 @@ class UserDO(UserDTO):
                 'VALIDATION_ERROR',
                 'O cpf está com o tamanho invalido.'
             )
+    
+    def set_password_hash(self):
+        self.senha = AuthHandler.hash_password(self.senha)

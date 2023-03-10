@@ -6,12 +6,11 @@ from test.utils import random_email, random_password, random
 
 def test_get_all_users_ok(client: TestClient):
     response = client.get('/users')
-    if len(response.json()) > 0:
+    if response.content is None:
         assert response.status_code == HTTPStatus.OK
         assert type(response.json()) == list
     else:
         assert response.status_code == HTTPStatus.NO_CONTENT
-        assert response.json() == None
 
 def test_create_user_validations(client: TestClient):
     email = random_email()

@@ -1,4 +1,4 @@
-from api.database.schemas import *
+from database.schemas import *
 from datetime import datetime as dt
 
 

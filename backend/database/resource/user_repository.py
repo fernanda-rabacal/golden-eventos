@@ -1,7 +1,7 @@
-from api.core.models.user import UserDO
-from api.core.models.exceptions import DatabaseException
-from api.database.schemas.user_entity import UserEntity
-from api.database import session_factory
+from core.models.user import UserDO
+from app.errors.exceptions import DatabaseException
+from database.schemas.user_entity import UserEntity
+from database import session_factory
 
 
 class UserConverter:
@@ -66,5 +66,9 @@ def find_all() -> list[UserDO] | None:
     return all_users if len(all_users) > 0 else None
 
 def find_by_id(user_id: int) -> UserDO | None:
-    user = session_factory().query(UserEntity).filter_by(id = user_id).first()
+    user = session_factory().get(UserEntity, user_id)
+    return UserConverter.toDO(user) if user is not None else None
+
+def find_by_email(email: str) -> UserDO | None:
+    user = session_factory().query(UserEntity).filter_by(email = email).first()
     return UserConverter.toDO(user) if user is not None else None

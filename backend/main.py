@@ -1,6 +1,6 @@
 import uvicorn
-from api.app import create_app, FastAPI
-from api.database.schemas import create_tables
+from app import create_app, FastAPI
+from database.schemas import create_tables
 
 
 golden_app: FastAPI = create_app(

@@ -17,7 +17,6 @@ def edit_assertions(response: Response, entity: str, created_id: int) -> None:
     assert response.json().get('message') == f'{entity.capitalize()} alterado com sucesso.'
     assert response.json().get('created_id') == created_id
 
-
 def delete_assertions(response: Response, entity: str) -> None:
     assert response.status_code == HTTPStatus.ACCEPTED
     assert type(response.json()) == dict
