@@ -2,14 +2,15 @@ import jwt
 from passlib.context import CryptContext
 from fastapi import Security
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from datetime import datetime as dt, timedelta as td 
+from datetime import datetime as dt
 from app.errors.exceptions import AuthException
+from app.security.token import AuthorizationToken
 
 
 class AuthHandler:
     security = HTTPBearer()
     pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
-    secret = 'SECRET'
+    secret = 'S'
 
     @staticmethod
     def hash_password(password: str) -> str:
@@ -18,18 +19,22 @@ class AuthHandler:
     def verify_password(self, plain_password: str, hashed_password: str) -> bool:
         return self.pwd_context.verify(plain_password, hashed_password)
     
-    def encode_token(self, user_id: int) -> str:
+    def encode_token(self, user_id: int, initiated_at: dt, expiration: dt) -> str:
         token_payload = {
-            'expiration': str(dt.utcnow() + td(days=0, minutes=5)),
-            'initiated_at': str(dt.utcnow()),
-            'owner_id': user_id
+            'exp': expiration,
+            'iat': initiated_at,
+            'sub': user_id,
         }
-
         return jwt.encode(token_payload, self.secret, algorithm='HS256')
     
-    def decode_token(self, token: str):
+    def decode_token(self, token: str) -> AuthorizationToken:
         try:
-            return jwt.decode(token, self.secret, algorithms=['HS256']).get('owner_email')
+            token_payload = jwt.decode(token, self.secret, algorithms=['HS256'])
+            return AuthorizationToken (
+                owner_id =token_payload.get('sub'), 
+                initiated_at = token_payload.get('iat'), 
+                expiration = token_payload.get('exp')
+            )
         except jwt.ExpiredSignatureError:
             raise AuthException (
                 'TOKEN_EXPIRADO',
@@ -43,3 +48,6 @@ class AuthHandler:
 
     def auth_wrapper(self, auth: HTTPAuthorizationCredentials = Security(security)):
         return self.decode_token(auth.credentials)
+
+
+auth_handler = AuthHandler()

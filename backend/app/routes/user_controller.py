@@ -1,7 +1,8 @@
-from fastapi import APIRouter
 from http import HTTPStatus
+from fastapi import APIRouter
 from fastapi import Response, Depends
-from app.security.auth import AuthHandler
+from app.security.auth import auth_handler
+from app.security.token import Token, AuthorizationToken
 from core.models.user import UserDO, UserDTO, UserLogin
 from core.models.responses import BasicResponse, CreateResponse
 import core.services.user_service as user_service
@@ -30,16 +31,17 @@ async def create_user(user: UserDO) -> CreateResponse:
     )
 
 @router.put('/users', status_code = HTTPStatus.CREATED)
-async def edit_user(user: UserDO) -> CreateResponse:
+async def edit_user(user: UserDO, token: AuthorizationToken = Depends(auth_handler.auth_wrapper)) -> CreateResponse:
     ''' Endpoint para alterar um usuario existente '''
+    print(token.__dict__)
     return CreateResponse (
         status = 'ALTERADO',
         message = 'Usuario alterado com sucesso.',
-        created_id = user_service.edit_user(user)
+        created_id = 2 # user_service.edit_user(user)
     )
 
 @router.delete('/users/{id}', status_code = HTTPStatus.ACCEPTED)
-async def delete_by_id(id: int) -> BasicResponse:
+async def delete_by_id(id: int, owner_id: int = Depends(auth_handler.auth_wrapper)) -> BasicResponse:
     ''' Endpoint para deletar um usuario '''
     user_service.delete_user(id)
     return BasicResponse (
@@ -48,6 +50,6 @@ async def delete_by_id(id: int) -> BasicResponse:
     )
 
 @router.post('/users/login')
-def login(user: UserLogin):
-    token = user_service.login_user(user)
-    return {'token':token}
+def login(user: UserLogin) -> Token:
+    token: Token = user_service.login_user(user)
+    return token

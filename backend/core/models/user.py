@@ -14,7 +14,6 @@ class UserDTO(BaseModel):
     cpf: str | None = None
     promotor: bool | None = None
 
-
 class UserDO(UserDTO):
     senha: str | None = None
 
